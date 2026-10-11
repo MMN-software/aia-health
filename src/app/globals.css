@@ -4,86 +4,60 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   Aia Health — Medical Theme
-   Palette: Deep teal / cyan primary + soft mint accent
+   Accordion animations
    ============================================================ */
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@layer utilities {
+  .animate-accordion-down {
+    animation: accordion-down 0.2s ease-out;
+  }
+  .animate-accordion-up {
+    animation: accordion-up 0.2s ease-out;
+  }
+}
 
 :root {
-  /* Base surfaces */
   --background: oklch(0.995 0.002 220);
   --foreground: oklch(0.20 0.03 240);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.20 0.03 240);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.20 0.03 240);
-
-  /* Brand — medical teal */
   --primary: oklch(0.55 0.11 220);
   --primary-foreground: oklch(0.99 0 0);
-
-  /* Accent — soft mint */
   --accent: oklch(0.94 0.04 190);
   --accent-foreground: oklch(0.28 0.07 220);
-
-  /* Secondary / Muted */
   --secondary: oklch(0.96 0.01 220);
   --secondary-foreground: oklch(0.25 0.03 240);
   --muted: oklch(0.965 0.008 220);
   --muted-foreground: oklch(0.50 0.02 240);
-
-  /* States */
   --destructive: oklch(0.60 0.20 25);
   --destructive-foreground: oklch(0.99 0 0);
-  --success: oklch(0.62 0.14 155);
-  --warning: oklch(0.75 0.15 75);
-
-  /* Borders & inputs */
   --border: oklch(0.91 0.01 220);
   --input: oklch(0.91 0.01 220);
   --ring: oklch(0.55 0.11 220);
-
-  /* Charts (for admin dashboard later) */
-  --chart-1: oklch(0.55 0.11 220);
-  --chart-2: oklch(0.62 0.14 155);
-  --chart-3: oklch(0.65 0.13 280);
-  --chart-4: oklch(0.75 0.15 75);
-  --chart-5: oklch(0.65 0.18 25);
-
-  /* Radius */
   --radius: 0.625rem;
-}
-
-.dark {
-  --background: oklch(0.15 0.02 240);
-  --foreground: oklch(0.97 0.005 220);
-  --card: oklch(0.19 0.02 240);
-  --card-foreground: oklch(0.97 0.005 220);
-  --popover: oklch(0.19 0.02 240);
-  --popover-foreground: oklch(0.97 0.005 220);
-
-  --primary: oklch(0.68 0.12 220);
-  --primary-foreground: oklch(0.15 0.02 240);
-
-  --accent: oklch(0.30 0.05 200);
-  --accent-foreground: oklch(0.95 0.02 190);
-
-  --secondary: oklch(0.24 0.02 240);
-  --secondary-foreground: oklch(0.97 0.005 220);
-  --muted: oklch(0.24 0.02 240);
-  --muted-foreground: oklch(0.68 0.02 220);
-
-  --destructive: oklch(0.65 0.20 25);
-  --destructive-foreground: oklch(0.99 0 0);
-
-  --border: oklch(0.28 0.02 240);
-  --input: oklch(0.28 0.02 240);
-  --ring: oklch(0.68 0.12 220);
-
-  --chart-1: oklch(0.68 0.12 220);
-  --chart-2: oklch(0.70 0.14 155);
-  --chart-3: oklch(0.72 0.14 280);
-  --chart-4: oklch(0.78 0.16 75);
-  --chart-5: oklch(0.70 0.19 25);
 }
 
 @theme inline {
@@ -106,30 +80,249 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
   }
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    background-color: var(--background);
+    color: var(--foreground);
   }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight;
+}
+/* ============================================================
+   Social Icons — Glassmorphism
+   ============================================================ */
+
+.social-icons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.social-icon-content {
+  position: relative;
+}
+
+.social-icon-content .social-tooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 15px;
+  opacity: 0;
+  visibility: hidden;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.social-icon-content:hover .social-tooltip {
+  opacity: 1;
+  visibility: visible;
+  top: -42px;
+}
+
+/* Base glassmorphism anchor */
+.social-icon-content a {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.06)
+  );
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  transition: all 0.35s ease-in-out;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.45),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Instagram glass border */
+.social-icon-content[data-social="instagram"] a {
+  border: 1px solid rgba(225, 48, 108, 0.6);
+  box-shadow:
+    inset 0 0 6px rgba(225, 48, 108, 0.4),
+    0 0 10px rgba(225, 48, 108, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* WhatsApp glass border */
+.social-icon-content[data-social="whatsapp"] a {
+  border: 1px solid rgba(37, 211, 102, 0.6);
+  box-shadow:
+    inset 0 0 6px rgba(37, 211, 102, 0.4),
+    0 0 10px rgba(37, 211, 102, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Telegram glass border */
+.social-icon-content[data-social="telegram"] a {
+  border: 1px solid rgba(0, 136, 204, 0.6);
+  box-shadow:
+    inset 0 0 6px rgba(0, 136, 204, 0.4),
+    0 0 10px rgba(0, 136, 204, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* LinkedIn glass border */
+.social-icon-content[data-social="linkedin"] a {
+  border: 1px solid rgba(10, 102, 194, 0.6);
+  box-shadow:
+    inset 0 0 6px rgba(10, 102, 194, 0.4),
+    0 0 10px rgba(10, 102, 194, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Shine sweep effect */
+.social-icon-content a::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  transform: rotate(25deg) translateX(-100%);
+  transition: transform 0.8s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.social-icon-content a:hover::before {
+  transform: rotate(25deg) translateX(100%);
+}
+
+.social-icon-content a:hover {
+  box-shadow: 3px 2px 30px 0px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.social-icon-content a .social-svg {
+  position: relative;
+  z-index: 3;
+  width: 20px;
+  height: 20px;
+}
+
+.social-icon-content a .social-filled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Gradient animation */
+@keyframes premiumGradient {
+  0% {
+    background-position: 0% 50%;
   }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Instagram — pink/purple gradient */
+.social-icon-content a[data-social="instagram"] .social-filled,
+.social-icon-content[data-social="instagram"] .social-tooltip {
+  background: linear-gradient(
+    135deg,
+    #3a0a24,
+    #7a1f4d,
+    #e1306c,
+    #c13584,
+    #f56040
+  );
+  background-size: 400% 400%;
+  animation: premiumGradient 6s ease infinite;
+  border: 1px solid rgba(225, 48, 108, 0.6);
+  box-shadow:
+    inset 0 0 12px rgba(225, 48, 108, 0.5),
+    0 0 24px rgba(225, 48, 108, 0.5);
+}
+
+/* WhatsApp — green gradient */
+.social-icon-content a[data-social="whatsapp"] .social-filled,
+.social-icon-content[data-social="whatsapp"] .social-tooltip {
+  background: linear-gradient(135deg, #0a2e1a, #146b35, #25d366, #0d2916);
+  background-size: 400% 400%;
+  animation: premiumGradient 6s ease infinite;
+  border: 1px solid rgba(37, 211, 102, 0.6);
+  box-shadow:
+    inset 0 0 12px rgba(37, 211, 102, 0.5),
+    0 0 24px rgba(37, 211, 102, 0.6);
+}
+
+/* Telegram — blue gradient */
+.social-icon-content a[data-social="telegram"] .social-filled,
+.social-icon-content[data-social="telegram"] .social-tooltip {
+  background: linear-gradient(135deg, #0a1f2d, #0f4a66, #0088cc, #0a2e44);
+  background-size: 400% 400%;
+  animation: premiumGradient 6s ease infinite;
+  border: 1px solid rgba(0, 136, 204, 0.6);
+  box-shadow:
+    inset 0 0 12px rgba(0, 136, 204, 0.5),
+    0 0 24px rgba(0, 136, 204, 0.6);
+}
+
+/* LinkedIn — blue gradient */
+.social-icon-content a[data-social="linkedin"] .social-filled,
+.social-icon-content[data-social="linkedin"] .social-tooltip {
+  background: linear-gradient(135deg, #051e3a, #0a417a, #0a66c2, #051e3a);
+  background-size: 400% 400%;
+  animation: premiumGradient 6s ease infinite;
+  border: 1px solid rgba(10, 102, 194, 0.6);
+  box-shadow:
+    inset 0 0 12px rgba(10, 102, 194, 0.5),
+    0 0 24px rgba(10, 102, 194, 0.6);
+}
+
+/* Empty area under tooltip */
+.social-icon-content a .social-filled {
+  top: auto;
+  bottom: 0;
+  height: 0;
+  border-radius: 12px;
+}
+
+.social-icon-content a:hover .social-filled {
+  top: 0;
+  height: 100%;
 }
