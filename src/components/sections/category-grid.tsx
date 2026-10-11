@@ -11,7 +11,8 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { CATEGORIES, type Category } from "@/lib/data/products";
+import { CATEGORIES } from "@/lib/data/products";
+import type { Category } from "@/types";
 
 const CATEGORY_META: Record<
   Category,
@@ -71,7 +72,6 @@ export function CategoryGrid() {
                 href={`/products?cat=${encodeURIComponent(cat)}`}
                 className="group relative overflow-hidden rounded-xl border border-border/60 bg-card p-5 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
               >
-                {/* Subtle gradient on hover */}
                 <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-primary/0 to-primary/0 transition-colors group-hover:from-primary/5 group-hover:to-transparent" />
 
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
