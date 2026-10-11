@@ -22,7 +22,8 @@ export const CATEGORY_ICONS: Record<Category, string> = {
   "Hospital Furniture": "Bed",
 };
 
-const IMG = "/images/products";
+/* Base path — must match basePath in next.config.ts */
+const IMG = "/aia-health/images/products";
 
 export const PRODUCTS: Product[] = [
   {

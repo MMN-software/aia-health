@@ -235,7 +235,7 @@ export function AboutContent() {
               >
                 <div className="relative aspect-square">
                   <Image
-                    src="/images/about-team.jpg"
+                    src="/aia-health/images/about-team.jpg"
                     alt="Aia Health team"
                     fill
                     unoptimized
